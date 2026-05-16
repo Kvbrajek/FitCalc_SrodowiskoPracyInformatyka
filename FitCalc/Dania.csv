@@ -1,0 +1,21 @@
+Typ;Numer;Nazwa;Skladniki;BazoweKcal
+Redukcja;1;Omlet proteinowy z borówkami;Białka jaj (100g), Twaróg chudy (100g), Odżywka WPC (30g), Borówki (100g);330
+Redukcja;2;Chuda wołowina z ryżem i brokułem;Chuda wołowina mielona (100g), Ryż biały (100g), Brokuły (100g), Sos passata (100g);535
+Redukcja;3;Proteinowy shake z kefirem;Kefir (420g), Truskawki mrożone (100g), Płatki owsiane (100g), Odżywka WPC (40g);630
+Redukcja;4;Sałatka z kurczakiem i awokado;Pierś z kurczaka (100g), Awokado (50g), Mix sałat (100g), Pomidorki (100g);235
+Redukcja;5;Dorsz pieczony z ziemniakami;Filet z dorsza (150g), Ziemniaki (200g), Szparagi (100g), Oliwa z oliwek (10g);380
+Redukcja;6;Twaróg na słodko z malinami;Twaróg chudy (150g), Jogurt naturalny (100g), Odżywka WPC (30g), Maliny (100g);330
+Redukcja;7;Fit tortilla z indykiem;Pierś z indyka (120g), Placek tortilli (60g), Sałata (50g), Jogurt gęsty (50g);375
+Redukcja;8;Krewetki z makaronem;Krewetki (150g), Makaron spaghetti (80g), Cukinia (150g), Oliwa z oliwek (10g);440
+Redukcja;9;Serek wiejski z warzywami i waflem;Serek wiejski lekki (200g), Rzodkiewka (50g), Ogórek (50g), Wafle ryżowe (30g);295
+Redukcja;10;Pieczona pierś z batatami;Pierś z kurczaka (150g), Bataty (150g), Fasolka szparagowa (100g);335
+Masa;1;Giga owsianka masowa;Płatki owsiane (100g), Mleko 3.2% (370g), Odżywka WPC (40g), Masło orzechowe (15g), Banan (100g);780
+Masa;2;Kulturystyczny klasyk premium;Wołowina mielona (150g), Ryż parboiled (100g), Oliwa z oliwek (15g), Awokado (100g);835
+Masa;3;Szejk szybkie kalorie;Mleko 3.2% (250g), Banany (200g), Masło orzechowe (30g), Płatki błyskawiczne (100g), Odżywka WPC (30g);920
+Masa;4;Makaron z kurczakiem w sosie;Makaron pełnoziarnisty (100g), Pierś z kurczaka (150g), Śmietanka 12% (100g), Oliwa z oliwek (15g);830
+Masa;5;Łosoś z kaszą i orzechami;Filet z łososia (150g), Kasza gryczana (100g), Orzechy włoskie (30g), Brokuły (100g);825
+Masa;6;Omlet masowy z dżemem;Jaja całe (3 szt), Mąka owsiana (80g), Odżywka WPC (30g), Dżem niskosłodzony (50g);720
+Masa;7;Burrito wołowe na bogato;Wołowina mielona (150g), Placki tortilli (120g), Fasola czerwona (50g), Ser żółty twardy (30g);940
+Masa;8;Pancakes z twarogiem i miodem;Jaja całe (2 szt), Mąka pszenna (100g), Twaróg półtłusty (100g), Miód naturalny (30g);680
+Masa;9;Ryż z kurczakiem w sosie orzechowym;Pierś z kurczaka (150g), Ryż basmati (120g), Masło orzechowe (40g), Mleczko kokosowe (50g);1010
+Masa;10;Stek z ziemniakami i masłem;Stek wołowy (200g), Ziemniaki (300g), Masło 82% (20g);715
