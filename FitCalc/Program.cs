@@ -56,25 +56,22 @@ namespace FitCalc
                 switch (wybor)
                 {
                     case "1":
-                        new ModulDietetyczny().Uruchom();
+                        new Zywienie().Uruchom();
                         break;
                     case "2":
-                        new ModulTreningowy().Uruchom();
+                        new Trening().Uruchom();
                         break;
                     case "3":
-                        new GeneratorPosilkowCSV().Uruchom();
+                        new Posilki().Uruchom();
                         break;
                     case "4":
                         Porady.Uruchom();
                         break;
                     case "5":
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("\n              Zamykamy. Do zobaczenia na treningu!");
-                        Console.ResetColor();
                         programDziala = false;
                         break;
                     default:
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("\n              Spróbuj jeszcze raz.");
                         Console.ResetColor();
                         Console.WriteLine("              Wciśnij cokolwiek, aby wrócić...");
@@ -87,30 +84,30 @@ namespace FitCalc
 
     public static class Narzedzia
     {
-        public static decimal PobierzLiczbe(string zacheta)
+        public static decimal PobierzLiczbe(string liczba)
         {
             decimal wynik;
             while (true)
             {
-                Console.Write(zacheta);
+                Console.Write(liczba);
                 try
                 {
                     if (decimal.TryParse(Console.ReadLine(), out wynik) && wynik > 0)
                         return wynik;
                     else
-                        throw new FormatException("To musi być liczba większa od zera.");
+                        throw new FormatException("tylko liczby powyżej 0");
                 }
                 catch (FormatException ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"              [BŁĄD] {ex.Message}\n");
+                    Console.WriteLine($"               {ex.Message}\n");
                     Console.ResetColor();
                 }
             }
         }
     }
 
-    public class ModulDietetyczny
+    public class Zywienie
     {
         public void Uruchom()
         {
@@ -147,25 +144,25 @@ namespace FitCalc
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("              Coś poszło nie tak przy czytaniu profilu: " + ex.Message);
+                    Console.WriteLine("              nie czyta profilu" + ex.Message);
                 }
             }
 
             if (odczytanoPoprawnie)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("\n              [Mamy Twój zapisany profil!]");
+                Console.WriteLine("\n              Istnieje zapisany profil");
                 Console.ResetColor();
                 Console.WriteLine($"              Waga: {profil.Waga} kg | Wzrost: {profil.Wzrost} cm | Wiek: {profil.Wiek} lat | Cel: {profil.Cel}");
 
-                Console.Write("\n              Co robimy? (T - lecimy z tym, C - zmieniam tylko cel, N - wpisuję od nowa): ");
+                Console.Write("\n              Co robimy? (1 - lecimy z tym zapisanym profilem, 2 - zmieniam tylko cel, 3 - uzupełniam profil od początku): ");
                 string odp = Console.ReadLine().ToUpper();
 
-                if (odp == "T")
+                if (odp == "1")
                 {
                     uzytoZapisanego = true;
                 }
-                else if (odp == "C")
+                else if (odp == "2")
                 {
                     Console.WriteLine("\n              Wybierz nowy cel:\n              [1] Redukcja\n              [2] Utrzymanie\n              [3] Masa");
                     int nowyCel;
@@ -195,16 +192,16 @@ namespace FitCalc
 
             if (uzytoZapisanego == false)
             {
-                Console.WriteLine("\n              --- NOWE DANE ---");
+                Console.WriteLine("\n               NOWE DANE ");
                 profil.Waga = Narzedzia.PobierzLiczbe("              Podaj swoją wagę (kg): ");
                 profil.Wzrost = (int)Narzedzia.PobierzLiczbe("              Podaj swój wzrost (cm): ");
                 profil.Wiek = (int)Narzedzia.PobierzLiczbe("              Podaj swój wiek (lata): ");
 
-                Console.WriteLine("\n              Cel:\n              [1] Redukcja\n              [2] Utrzymanie\n              [3] Masa");
+                Console.WriteLine("\n              Cel:\n              [1] Redukcja\n              [2] Utrzymanie wagi\n              [3] Masa");
                 int wyborCelu;
                 while (!int.TryParse(Console.ReadLine(), out wyborCelu) || wyborCelu < 1 || wyborCelu > 3)
                 {
-                    Console.Write("              Wybierz 1, 2 lub 3: ");
+                    Console.Write("              Wybierz cel od 1-3: ");
                 }
                 profil.Cel = (CelDietetyczny)wyborCelu;
 
@@ -215,7 +212,7 @@ namespace FitCalc
                         sw.WriteLine($"{profil.Waga};{profil.Wzrost};{profil.Wiek};{(int)profil.Cel}");
                     }
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine("              Profil zapisany elegancko!");
+                    Console.WriteLine("              Profil zapisany elegancko");
                     Console.ResetColor();
                 }
                 catch (Exception ex)
@@ -231,10 +228,10 @@ namespace FitCalc
 
             if (profil.Cel == CelDietetyczny.Redukcja || profil.Cel == CelDietetyczny.Masa)
             {
-                string akcja = profil.Cel == CelDietetyczny.Redukcja ? "zrzucać" : "łapać";
+                string akcja = profil.Cel == CelDietetyczny.Redukcja ? "zrzucać" : "przybierać";
                 Console.WriteLine($"\n              W jakim tempie chcesz {akcja} wagę? (kg / tydzień)");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine("              Zdrowe tempo to od 0,2 do 0,5 kg.");
+                Console.WriteLine("              bezpieczne tempo to między 0,2 do 0,5 kg.");
                 Console.ResetColor();
 
                 decimal tempo;
@@ -245,8 +242,8 @@ namespace FitCalc
                     {
                         break;
                     }
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("              Trochę za szybko! Podaj bezpieczniejszą wartość (max 1.5).");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("              Podaj bezpieczniejszą wartość (max 1,5).");
                     Console.ResetColor();
                 }
 
@@ -269,8 +266,8 @@ namespace FitCalc
             int wegle = (doceloweKcal - (bialko * 4) - (tluszcze * 9)) / 4;
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n              Całkowite zapotrzebowanie: {tdee} kcal");
-            Console.WriteLine($"              ZALECANE SPOŻYCIE ({profil.Cel.ToString().ToUpper()}):   {doceloweKcal} kcal");
+            Console.WriteLine($"\n              Całkowite zapotrzebowanie w ciągu dnia: {tdee} kcal");
+            Console.WriteLine($"              Zalecane spożycie do osiągnięcia celu({profil.Cel.ToString().ToUpper()}):   {doceloweKcal} kcal");
             Console.ResetColor();
 
             WypiszMakro(bialko, tluszcze, wegle);
@@ -278,10 +275,10 @@ namespace FitCalc
             if (zmianaWagiTygodniowo != 0)
             {
                 decimal nowaWaga = PrognozujWageRekurencyjnie(profil.Waga, zmianaWagiTygodniowo, 4);
-                Console.WriteLine($"\n              > Twoja prognozowana waga za 4 tyg.: {Math.Round(nowaWaga, 1)} kg");
+                Console.WriteLine($"\n               Twoja prawdopodobna waga za miesiąc.: {Math.Round(nowaWaga, 1)} kg");
             }
 
-            Console.WriteLine("\n              --- ANALIZA SYLWETKI I NAWODNIENIA ---");
+            Console.WriteLine("\n               ANALIZA SYLWETKI I NAWODNIENIA ");
             decimal wzrostMetry = profil.Wzrost / 100m;
             decimal bmi = profil.Waga / (wzrostMetry * wzrostMetry);
 
@@ -294,7 +291,7 @@ namespace FitCalc
             else if (bmi < 30m) Console.WriteLine("Nadwaga");
             else Console.WriteLine("Otyłość");
 
-            Console.WriteLine($"              * Zalecane picie: {woda} ml");
+            Console.WriteLine($"              * Zalecane spożycie wody: {woda} ml");
 
             Console.WriteLine("\n              Wciśnij cokolwiek, aby wrócić...");
             Console.ReadKey();
@@ -315,7 +312,7 @@ namespace FitCalc
         }
     }
      
-    public class ModulTreningowy
+    public class Trening
     {
         public void Uruchom()
         {
@@ -326,19 +323,19 @@ namespace FitCalc
             Console.WriteLine("              ╚═════════════════════════════════════════════════════╝");
             Console.ResetColor();
 
-            decimal ciezar = Narzedzia.PobierzLiczbe("              Ile najwięcej podniosłeś (kg): ");
-            int powtorzenia = (int)Narzedzia.PobierzLiczbe("              Na ile powtórzeń to poszło: ");
+            decimal ciezar = Narzedzia.PobierzLiczbe("              Ile podniosłeś (kg): ");
+            int powtorzenia = (int)Narzedzia.PobierzLiczbe("              Na ile powtórzeń to podniosłeś: ");
 
             decimal max1RM = Oblicz1RM(ciezar, powtorzenia);
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n              » Twój szacowany max (1RM): {max1RM} kg «");
+            Console.WriteLine($"\n               Twój szacowany max (1RM): {max1RM} kg «");
             Console.ResetColor();
 
             Console.Write("\n              Zapisujemy to do historii rekordów? (T/N): ");
             if (Console.ReadLine().ToUpper() == "T")
             {
-                Console.Write("              > Jakie to było ćwiczenie (np. Wyciskanie): ");
+                Console.Write("               Jakie to było ćwiczenie (np. Wyciskanie): ");
                 string rekordCwiczenie = Console.ReadLine().Trim();
                 try
                 {
@@ -347,7 +344,7 @@ namespace FitCalc
                         sw.WriteLine($"{DateTime.Now.ToShortDateString()} - {rekordCwiczenie}: {max1RM} kg");
                     }
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine("              [ Zapisano! Sprawdź plik HistoriaRekordow.txt ]");
+                    Console.WriteLine("              Zapisano rekord do pliku");
                     Console.ResetColor();
                 }
                 catch (Exception ex)
@@ -356,20 +353,20 @@ namespace FitCalc
                 }
             }
 
-            Console.Write("\n              Robimy z tego 5-tygodniowy plan i zrzucamy do pliku? (T/N): ");
+            Console.Write("\n              Robimy z tego 5-tygodniowy plan progresji i zapisujemy do pliku? (T/N): ");
             if (Console.ReadLine().ToUpper() == "T")
             {
                 Console.Write("              > Podaj nazwę ćwiczenia do planu: ");
                 string cwiczenie = Console.ReadLine().Trim();
 
-                Console.WriteLine("\n              Cel planu:\n              [1] Czysta siła\n              [2] Hipertrofia (Masa)");
-                Console.Write("              Wybierz (1-2): ");
+                Console.WriteLine("\n              Cel planu:\n              [1] Siła (niższe zakresy powtórzeń)\n              [2] Hipertrofia (wyższe zakresy powtórzeń)");
+                Console.Write("              Wybierz [1-2]: ");
                 CelTreningowy cel = Console.ReadLine() == "1" ? CelTreningowy.Sila : CelTreningowy.Hipertrofia;
 
                 int czestotliwosc = 1;
                 while (true)
                 {
-                    Console.Write("              Ile razy w tygodniu to robisz? (1-3): ");
+                    Console.Write("              Ile razy w tygodniu wykonujesz to ćwiczenie? [1-3]: ");
                     if (int.TryParse(Console.ReadLine(), out czestotliwosc) && czestotliwosc >= 1 && czestotliwosc <= 3) break;
                 }
 
@@ -404,7 +401,7 @@ namespace FitCalc
 
             using (StreamWriter sw = new StreamWriter(sciezkaPliku))
             {
-                string naglowek = $"\n--- 5-TYGODNIOWA PERIODYZACJA: {cel.ToString().ToUpper()} | ĆWICZENIE: {cwiczenie.ToUpper()} ---";
+                string naglowek = $"\n    5-TYGODNIOWA PROGRESJA: {cel.ToString().ToUpper()} | ĆWICZENIE: {cwiczenie.ToUpper()} ---";
                 Console.WriteLine(naglowek.Replace("\n", "\n              "));
                 sw.WriteLine(naglowek);
 
@@ -432,17 +429,17 @@ namespace FitCalc
                 }
             }
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine($"\n              [ Plik gotowy! Nazwa: {sciezkaPliku} ]");
+            Console.WriteLine($"\n               Plik z planem gotowy ");
             Console.ResetColor();
         }
     }
 
-    public class GeneratorPosilkowCSV
+    public class Posilki
     {
         private Dictionary<string, Danie> menuRedukcyjne = new Dictionary<string, Danie>();
         private Dictionary<string, Danie> menuMasowe = new Dictionary<string, Danie>();
 
-        public GeneratorPosilkowCSV()
+        public Posilki()
         {
             WczytajBazeZPlikuCSV();
         }
@@ -490,7 +487,7 @@ namespace FitCalc
             if (menuRedukcyjne.Count == 0 && menuMasowe.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("              [BŁĄD] Nie widzę pliku Dania.csv!");
+                Console.WriteLine("              Nie widzę pliku Dania.csv!");
                 Console.ResetColor();
                 Console.ReadKey();
                 return;
@@ -499,11 +496,11 @@ namespace FitCalc
             Console.WriteLine("\n              Jaki masz teraz cel:");
             Console.WriteLine("              [1] Redukcja (zapychające i dużo białka)");
             Console.WriteLine("              [2] Masa (łatwostrawne kalorie)");
-            Console.Write("\n              Wybieraj: ");
+            Console.Write("\n              Wybierz: ");
             string celInput = Console.ReadLine();
             Dictionary<string, Danie> wybraneMenu = (celInput == "1") ? menuRedukcyjne : menuMasowe;
 
-            Console.WriteLine("\n              Oto co mamy w bazie:");
+            Console.WriteLine("\n              Oto co mamy w pliku:");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("              -----------------------------------------------------");
             Console.ResetColor();
@@ -511,13 +508,13 @@ namespace FitCalc
             {
                 Console.WriteLine($"              [{danie.Key}] {danie.Value.Nazwa} (Baza: {danie.Value.BazoweKcal} kcal)");
             }
-            Console.Write("\n              > Podaj numer z listy: ");
+            Console.Write("\n               Podaj numer: ");
             string numerDania = Console.ReadLine();
 
             if (wybraneMenu.ContainsKey(numerDania))
             {
                 Danie danie = wybraneMenu[numerDania];
-                int doceloweKcal = (int)Narzedzia.PobierzLiczbe("\n              Ile kalorii ma mieć ten posiłek? (np. 500): ");
+                int doceloweKcal = (int)Narzedzia.PobierzLiczbe("\n              Ile kalorii ma mieć ten posiłek?: ");
                 decimal przelicznik = (decimal)doceloweKcal / danie.BazoweKcal;
 
                 string tekstWRamce = $"  PRZEPIS DOSTOSOWANY POD TWÓJ CEL KALORII ({doceloweKcal} kcal)  ";
@@ -528,8 +525,8 @@ namespace FitCalc
                 Console.WriteLine($"              ║{tekstWRamce}║");
                 Console.WriteLine($"              ╚{liniaKreskowa}╝");
                 Console.ResetColor();
-                Console.WriteLine($"              » Danie: {danie.Nazwa}");
-                Console.WriteLine("\n              Składniki do zważenia:");
+                Console.WriteLine($"                Danie: {danie.Nazwa}");
+                Console.WriteLine("\n              Składniki:");
 
                 string[] skladniki = danie.SkladnikiOpis.Split(',');
                 foreach (string skladnik in skladniki)
@@ -556,7 +553,7 @@ namespace FitCalc
                 int tluszcze = (int)((doceloweKcal * 0.25) / 9);
                 int wegle = celInput == "1" ? (int)((doceloweKcal * 0.35) / 4) : (int)((doceloweKcal * 0.50) / 4);
 
-                Console.WriteLine("\n              » Makro dla tej porcji:");
+                Console.WriteLine("\n                Makro dla tej porcji:");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($"                Białko: ~{bialko}g | Tłuszcze: ~{tluszcze}g | Węgle: ~{wegle}g");
                 Console.ResetColor();
