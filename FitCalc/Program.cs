@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace FitCalc
 {
@@ -27,7 +26,7 @@ namespace FitCalc
     {
         static void Main(string[] args)
         {
-            Console.Title = "FitCalc";
+            Console.Title = "FitCalc - Jakub Wójcik - Języki i Paradygmaty";
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             bool programDziala = true;
@@ -44,7 +43,7 @@ namespace FitCalc
                 Console.WriteLine("\n              Co dzisiaj robimy:");
                 Console.WriteLine("\n              [1] Kalkulator zapotrzebowania kalorycznego, BMI oraz zalecana ilość wody");
                 Console.WriteLine("              [2] Kalkulator ciężaru maksymalnego 1RM oraz układanie planu periodyzacji");
-                Console.WriteLine("              [3] Szamka - przepisy pod makro");
+                Console.WriteLine("              [3] Przepisy pod makro");
                 Console.WriteLine("              [4] Porady dla początkujących");
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("\n              [5] Wychodzę");
@@ -192,7 +191,7 @@ namespace FitCalc
 
             if (uzytoZapisanego == false)
             {
-                Console.WriteLine("\n               NOWE DANE ");
+                Console.WriteLine("\n              NOWE DANE ");
                 profil.Waga = Narzedzia.PobierzLiczbe("              Podaj swoją wagę (kg): ");
                 profil.Wzrost = (int)Narzedzia.PobierzLiczbe("              Podaj swój wzrost (cm): ");
                 profil.Wiek = (int)Narzedzia.PobierzLiczbe("              Podaj swój wiek (lata): ");
@@ -231,19 +230,19 @@ namespace FitCalc
                 string akcja = profil.Cel == CelDietetyczny.Redukcja ? "zrzucać" : "przybierać";
                 Console.WriteLine($"\n              W jakim tempie chcesz {akcja} wagę? (kg / tydzień)");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine("              bezpieczne tempo to między 0,2 do 0,5 kg.");
+                Console.WriteLine("              bezpieczne tempo to między 0,5 kg - 1 kg.");
                 Console.ResetColor();
 
                 decimal tempo;
                 while (true)
                 {
-                    tempo = Narzedzia.PobierzLiczbe("              > Podaj wartość (np. 0,3): ");
+                    tempo = Narzedzia.PobierzLiczbe("                Podaj wartość: ");
                     if (tempo <= 1.5m)
                     {
                         break;
                     }
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("              Podaj bezpieczniejszą wartość (max 1,5).");
+                    Console.WriteLine("              Podaj bezpieczniejszą wartość (max 1,5 kg).");
                     Console.ResetColor();
                 }
 
@@ -275,7 +274,7 @@ namespace FitCalc
             if (zmianaWagiTygodniowo != 0)
             {
                 decimal nowaWaga = PrognozujWageRekurencyjnie(profil.Waga, zmianaWagiTygodniowo, 4);
-                Console.WriteLine($"\n               Twoja prawdopodobna waga za miesiąc.: {Math.Round(nowaWaga, 1)} kg");
+                Console.WriteLine($"\n               Twoja prognozowana waga za miesiąc.: {Math.Round(nowaWaga, 1)} kg");
             }
 
             Console.WriteLine("\n               ANALIZA SYLWETKI I NAWODNIENIA ");
@@ -291,13 +290,12 @@ namespace FitCalc
             else if (bmi < 30m) Console.WriteLine("Nadwaga");
             else Console.WriteLine("Otyłość");
 
-            Console.WriteLine($"              * Zalecane spożycie wody: {woda} ml");
+            Console.WriteLine($"                Zalecane spożycie wody: {woda} ml");
 
             Console.WriteLine("\n              Wciśnij cokolwiek, aby wrócić...");
             Console.ReadKey();
         }
 
-        
         private int ObliczBMR(decimal waga, int wzrost, int wiek) => (int)((10m * waga) + (6.25m * wzrost) - (5m * wiek) + 5m);
 
         private void WypiszMakro(params int[] makroskladniki)
@@ -311,7 +309,7 @@ namespace FitCalc
             return PrognozujWageRekurencyjnie(waga + zmianaTygodniowa, zmianaTygodniowa, tygodnieZostaly - 1);
         }
     }
-     
+
     public class Trening
     {
         public void Uruchom()
@@ -329,19 +327,21 @@ namespace FitCalc
             decimal max1RM = Oblicz1RM(ciezar, powtorzenia);
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n               Twój szacowany max (1RM): {max1RM} kg «");
+            Console.WriteLine($"\n               Twój szacowany max (1RM): {max1RM} kg ");
             Console.ResetColor();
+
+            string nazwaCwiczenia = "";
 
             Console.Write("\n              Zapisujemy to do historii rekordów? (T/N): ");
             if (Console.ReadLine().ToUpper() == "T")
             {
                 Console.Write("               Jakie to było ćwiczenie (np. Wyciskanie): ");
-                string rekordCwiczenie = Console.ReadLine().Trim();
+                nazwaCwiczenia = Console.ReadLine().Trim();
                 try
                 {
                     using (StreamWriter sw = new StreamWriter("HistoriaRekordow.txt", true))
                     {
-                        sw.WriteLine($"{DateTime.Now.ToShortDateString()} - {rekordCwiczenie}: {max1RM} kg");
+                        sw.WriteLine($"{DateTime.Now.ToShortDateString()} - {nazwaCwiczenia}: {max1RM} kg");
                     }
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("              Zapisano rekord do pliku");
@@ -356,8 +356,11 @@ namespace FitCalc
             Console.Write("\n              Robimy z tego 5-tygodniowy plan progresji i zapisujemy do pliku? (T/N): ");
             if (Console.ReadLine().ToUpper() == "T")
             {
-                Console.Write("              > Podaj nazwę ćwiczenia do planu: ");
-                string cwiczenie = Console.ReadLine().Trim();
+                if (string.IsNullOrEmpty(nazwaCwiczenia))
+                {
+                    Console.Write("                  Podaj nazwę ćwiczenia do planu: ");
+                    nazwaCwiczenia = Console.ReadLine().Trim();
+                }
 
                 Console.WriteLine("\n              Cel planu:\n              [1] Siła (niższe zakresy powtórzeń)\n              [2] Hipertrofia (wyższe zakresy powtórzeń)");
                 Console.Write("              Wybierz [1-2]: ");
@@ -370,7 +373,7 @@ namespace FitCalc
                     if (int.TryParse(Console.ReadLine(), out czestotliwosc) && czestotliwosc >= 1 && czestotliwosc <= 3) break;
                 }
 
-                GenerujZapiszPlan(max1RM, cel, czestotliwosc, cwiczenie);
+                GenerujZapiszPlan(max1RM, cel, czestotliwosc, nazwaCwiczenia);
             }
 
             Console.WriteLine("\n              Wciśnij cokolwiek, aby wrócić...");
